@@ -17,6 +17,7 @@ export const useDraggable = (options: DraggableOptions) => {
     
     const handleDragStart = (e: DragEvent) => {
       if (e.dataTransfer) {
+        // Make sure we stringify the full item with all properties
         e.dataTransfer.setData('application/json', JSON.stringify({
           type,
           item,

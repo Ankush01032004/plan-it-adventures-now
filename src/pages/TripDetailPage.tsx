@@ -204,19 +204,18 @@ const TripDetailPage: React.FC = () => {
     }
   };
   
-  // Handle drag and drop for activities
+  // Handle drag and drop for activities - Fixed to correctly move activities between days
   const handleActivityDrop = (e: any) => {
     if (!currentTrip) return;
     
     const { type, item, dayId: targetDayId } = e.detail;
     
-    if (type === 'ACTIVITY' && item) {
+    if (type === 'ACTIVITY' && item && targetDayId) {
       const sourceDayId = item.dayId;
       
-      // If source and target are the same, and we're reordering within a day
+      // If source and target are the same, reordering within a day is not handled yet
       if (sourceDayId === targetDayId) {
-        // Handle reordering within the same day
-        // This would require additional logic to determine position
+        // Skip reordering within same day for now
         return;
       }
       
@@ -225,11 +224,14 @@ const TripDetailPage: React.FC = () => {
       const targetDay = currentTrip.days.find(day => day.id === targetDayId);
       
       if (sourceDay && targetDay) {
-        // Copy the activity to be moved
+        // Find the activity to be moved
         const activityToMove = sourceDay.activities.find(act => act.id === item.id);
         
         if (activityToMove) {
-          // Create updated trip - FIXED: Proper immutable approach to update days
+          // Create a deep copy of the activity to avoid reference issues
+          const activityCopy = { ...activityToMove };
+          
+          // Create updated trip with immutable updates
           const updatedDays = currentTrip.days.map(day => {
             // Remove from source day
             if (day.id === sourceDayId) {
@@ -243,19 +245,20 @@ const TripDetailPage: React.FC = () => {
             if (day.id === targetDayId) {
               return {
                 ...day,
-                activities: [...day.activities, activityToMove],
+                activities: [...day.activities, activityCopy],
               };
             }
             
             return day;
           });
           
-          // Update trip with new days array
+          // Create the updated trip object
           const updatedTrip = {
             ...currentTrip,
             days: updatedDays,
           };
           
+          // Update the trip with the new structure
           updateTrip(updatedTrip);
           
           toast({
@@ -279,6 +282,10 @@ const TripDetailPage: React.FC = () => {
       }
     };
     
+    // Remove any existing listeners first to avoid duplicates
+    document.removeEventListener('item-dropped', handleItemDropped as EventListener);
+    
+    // Add the event listener
     document.addEventListener('item-dropped', handleItemDropped as EventListener);
     
     return () => {

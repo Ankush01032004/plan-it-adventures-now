@@ -49,7 +49,7 @@ export const useDroppable = (options: DroppableOptions) => {
           // Only accept drops of the specified type
           if (data.type === accept) {
             // Dispatch custom event with the data
-            const dropEvent = new CustomEvent('item-dropped', {
+            const customEvent = new CustomEvent('item-dropped', {
               bubbles: true,
               detail: {
                 type: data.type,
@@ -58,7 +58,7 @@ export const useDroppable = (options: DroppableOptions) => {
               }
             });
             
-            document.dispatchEvent(dropEvent);
+            document.dispatchEvent(customEvent);
             
             // Call the onDrop callback if provided
             if (onDrop) {

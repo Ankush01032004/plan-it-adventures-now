@@ -22,9 +22,10 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 }) => {
   const [showActions, setShowActions] = useState(false);
   
+  // Make sure we include dayId in the item being dragged
   const { dragRef, isDragging } = useDraggable({
     type: 'ACTIVITY',
-    item: { id: activity.id, dayId, index },
+    item: { id: activity.id, dayId, index, ...activity },
   });
   
   const getActivityIcon = () => {
