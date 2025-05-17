@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Activity } from '@/types/trip';
-import { Pencil, Trash2, MapPin, Clock, Food, Museum, Map } from 'lucide-react';
+import { Pencil, Trash2, MapPin, Clock, UtensilsCrossed, Landmark, Map } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDraggable } from '@/hooks/useDraggable';
 
@@ -30,9 +30,9 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   const getActivityIcon = () => {
     switch (activity.type) {
       case 'food':
-        return <Food size={20} />;
+        return <UtensilsCrossed size={20} />;
       case 'museum':
-        return <Museum size={20} />;
+        return <Landmark size={20} />;
       case 'landmark':
         return <Map size={20} />;
       default:

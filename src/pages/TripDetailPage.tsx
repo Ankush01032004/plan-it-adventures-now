@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTrip } from '@/context/TripContext';
@@ -177,15 +176,15 @@ const TripDetailPage: React.FC = () => {
     updateTrip(updatedTrip);
   };
   
-  // Handle drag and drop for days
+  // Fix the drag and drop for days
   const handleDayDrop = (e: CustomEvent) => {
     if (!currentTrip) return;
     
     const { item } = e.detail;
     
     if (item && typeof item.index === 'number') {
-      // Calculate new index based on drop position
-      const dropIndex = currentTrip.days.findIndex(day => day.element === e.target);
+      // Instead of using element property which doesn't exist, use direct index comparison
+      const dropIndex = e.target ? Array.from(document.querySelectorAll('.day-card')).indexOf(e.target as Element) : -1;
       
       if (dropIndex !== -1 && dropIndex !== item.index) {
         const updatedDays = reorder(currentTrip.days, item.index, dropIndex);
@@ -294,7 +293,7 @@ const TripDetailPage: React.FC = () => {
       ) : (
         <div className="flex overflow-x-auto pb-6 gap-6 snap-x">
           {currentTrip.days.map((day, index) => (
-            <div key={day.id} className="snap-start">
+            <div key={day.id} className="snap-start day-card">
               <DayCard
                 day={day}
                 onAddActivity={handleAddActivity}
