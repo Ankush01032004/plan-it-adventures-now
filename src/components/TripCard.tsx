@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { format, differenceInDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Map, CalendarIcon } from 'lucide-react';
+import { Calendar, Map, CalendarIcon, MoreHorizontal } from 'lucide-react';
 
 interface TripCardProps {
   trip: Trip;
@@ -34,23 +34,53 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onEdit, onDelete }) => {
     
     return `${days} day${days > 1 ? 's' : ''}`;
   };
+  
+  // Generate a consistent background gradient based on trip title
+  const getBackgroundGradient = () => {
+    const gradients = [
+      'from-blue-500 to-purple-500',
+      'from-green-400 to-blue-500',
+      'from-yellow-400 to-orange-500',
+      'from-pink-500 to-rose-500',
+      'from-indigo-500 to-blue-500',
+      'from-cyan-400 to-sky-500',
+      'from-amber-400 to-orange-600',
+    ];
+    
+    // Use trip id to select a consistent gradient
+    const index = trip.id.charCodeAt(0) % gradients.length;
+    return gradients[index];
+  };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <CardHeader className="bg-ocean text-white p-4">
-        <CardTitle>{trip.title}</CardTitle>
-        <CardDescription className="text-ocean-light">
+    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
+      <CardHeader className={`bg-gradient-to-r ${getBackgroundGradient()} text-white p-5 relative`}>
+        <CardTitle className="font-bold text-xl">{trip.title}</CardTitle>
+        <CardDescription className="text-white/90 font-medium">
           {trip.destination || 'No destination set'}
         </CardDescription>
+        <div className="absolute top-2 right-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-white/70 hover:text-white hover:bg-white/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(trip);
+            }}
+          >
+            <MoreHorizontal size={18} />
+          </Button>
+        </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-5 flex-grow">
         {(trip.startDate && trip.endDate) ? (
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center">
-              <CalendarIcon size={16} className="mr-1" />
+              <CalendarIcon size={16} className="mr-1 text-muted-foreground" />
               <span className="text-sm">{formatDateRange()}</span>
             </div>
-            <div className="text-sm font-medium">
+            <div className="text-sm font-medium text-muted-foreground">
               {getDuration()}
             </div>
           </div>
@@ -67,7 +97,11 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onEdit, onDelete }) => {
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => onEdit(trip)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(trip);
+              }}
+              className="hover:text-ocean"
             >
               Edit
             </Button>
@@ -75,17 +109,21 @@ const TripCard: React.FC<TripCardProps> = ({ trip, onEdit, onDelete }) => {
               variant="ghost" 
               size="sm"
               className="text-red-500 hover:text-red-700 hover:bg-red-50"
-              onClick={() => onDelete(trip.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(trip.id);
+              }}
             >
               Delete
             </Button>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="bg-muted p-4 flex justify-end">
+      <CardFooter className="bg-muted/50 p-4 flex justify-end">
         <Button
           variant="default"
           onClick={() => navigate(`/trip/${trip.id}`)}
+          className="w-full bg-gradient-to-r from-ocean to-ocean-dark hover:from-ocean-dark hover:to-ocean-dark transition-all duration-300"
         >
           View Itinerary
         </Button>
