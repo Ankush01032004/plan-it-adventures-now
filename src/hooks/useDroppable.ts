@@ -25,6 +25,7 @@ export const useDroppable = (options: DroppableOptions) => {
       
       if (!isOver) {
         setIsOver(true);
+        element.classList.add('bg-opacity-10', 'bg-blue-200', 'border-dashed', 'border-2', 'border-blue-400');
       }
     };
     
@@ -32,12 +33,14 @@ export const useDroppable = (options: DroppableOptions) => {
       // Only consider it a leave if we're moving outside the element
       if (e.target === element && isOver) {
         setIsOver(false);
+        element.classList.remove('bg-opacity-10', 'bg-blue-200', 'border-dashed', 'border-2', 'border-blue-400');
       }
     };
     
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
       setIsOver(false);
+      element.classList.remove('bg-opacity-10', 'bg-blue-200', 'border-dashed', 'border-2', 'border-blue-400');
       
       if (e.dataTransfer) {
         try {

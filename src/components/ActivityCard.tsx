@@ -51,7 +51,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
         ${activity.type === 'transport' ? 'border-yellow-500' : ''}
         ${activity.type === 'hotel' ? 'border-indigo-500' : ''}
         ${activity.type === 'other' ? 'border-gray-500' : ''}
-        ${isDragging ? 'dragging' : ''}
+        ${isDragging ? 'opacity-50 shadow-lg scale-95' : ''}
         hover:shadow-md transition-all duration-200 hover:translate-y-[-2px]`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}

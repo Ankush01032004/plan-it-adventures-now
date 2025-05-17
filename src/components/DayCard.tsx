@@ -43,7 +43,7 @@ const DayCard: React.FC<DayCardProps> = ({
     <div 
       ref={dragRef}
       className={`flex-shrink-0 w-80 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl shadow-md 
-        ${isDragging ? 'dragging' : ''}
+        ${isDragging ? 'opacity-50 border-2 border-dashed border-gray-400' : ''}
         hover:shadow-lg transition-all duration-300`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
@@ -83,7 +83,7 @@ const DayCard: React.FC<DayCardProps> = ({
       
       <div 
         ref={dropRef}
-        className={`min-h-[200px] ${isOver ? 'drag-over' : ''}`}
+        className={`min-h-[200px] rounded-lg p-2 transition-colors duration-200 ${isOver ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
       >
         {day.activities.map((activity, actIndex) => (
           <ActivityCard

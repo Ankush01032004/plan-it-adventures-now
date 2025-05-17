@@ -177,14 +177,16 @@ const TripDetailPage: React.FC = () => {
   };
   
   // Fix the drag and drop for days
-  const handleDayDrop = (e: CustomEvent) => {
+  const handleDayDrop = (e: any) => {
     if (!currentTrip) return;
     
     const { item } = e.detail;
     
     if (item && typeof item.index === 'number') {
-      // Instead of using element property which doesn't exist, use direct index comparison
-      const dropIndex = e.target ? Array.from(document.querySelectorAll('.day-card')).indexOf(e.target as Element) : -1;
+      // Find the drop target day card index
+      const dayCards = document.querySelectorAll('.day-card');
+      const dropTarget = e.target.closest('.day-card');
+      const dropIndex = dropTarget ? Array.from(dayCards).indexOf(dropTarget) : -1;
       
       if (dropIndex !== -1 && dropIndex !== item.index) {
         const updatedDays = reorder(currentTrip.days, item.index, dropIndex);
@@ -192,6 +194,11 @@ const TripDetailPage: React.FC = () => {
         updateTrip({
           ...currentTrip,
           days: updatedDays,
+        });
+        
+        toast({
+          title: "Day reordered",
+          description: `Day moved to position ${dropIndex + 1}`,
         });
       }
     }
@@ -205,6 +212,13 @@ const TripDetailPage: React.FC = () => {
     
     if (type === 'ACTIVITY' && item) {
       const sourceDayId = item.dayId;
+      
+      // If source and target are the same, and we're reordering within a day
+      if (sourceDayId === targetDayId) {
+        // Handle reordering within the same day
+        // This would require additional logic to determine position
+        return;
+      }
       
       // Find source and target days
       const sourceDay = currentTrip.days.find(day => day.id === sourceDayId);
