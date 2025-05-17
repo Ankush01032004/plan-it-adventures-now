@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useTrip } from '@/context/TripContext';
 import TripCard from '@/components/TripCard';
@@ -13,46 +12,45 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuL
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
-
 const HomePage = () => {
-  const { allTrips, createTrip, updateTrip, deleteTrip } = useTrip();
+  const {
+    allTrips,
+    createTrip,
+    updateTrip,
+    deleteTrip
+  } = useTrip();
   const [isAddTripDialogOpen, setIsAddTripDialogOpen] = useState(false);
   const [tripToEdit, setTripToEdit] = useState<Trip | undefined>(undefined);
   const navigate = useNavigate();
-  
   useEffect(() => {
     // Initialize with sample data if no trips exist
     initializeWithSampleData();
   }, []);
-
   const handleSaveTrip = (tripData: Partial<Trip>) => {
     if (tripToEdit) {
       // Update existing trip
       updateTrip({
         ...tripToEdit,
-        ...tripData,
+        ...tripData
       });
       toast({
         title: "Trip updated",
-        description: `${tripData.title} has been updated successfully.`,
+        description: `${tripData.title} has been updated successfully.`
       });
     } else {
       // Create new trip
       createTrip(tripData.title || 'New Trip');
       toast({
         title: "Trip created",
-        description: `${tripData.title || 'New Trip'} has been created successfully.`,
+        description: `${tripData.title || 'New Trip'} has been created successfully.`
       });
     }
-    
     setTripToEdit(undefined);
   };
-
   const handleEditTrip = (trip: Trip) => {
     setTripToEdit(trip);
     setIsAddTripDialogOpen(true);
   };
-
   const handleDeleteTrip = (tripId: string) => {
     if (confirm('Are you sure you want to delete this trip?')) {
       deleteTrip(tripId);
@@ -63,9 +61,7 @@ const HomePage = () => {
       });
     }
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <OnboardingDialog />
       
       {/* Hero Section */}
@@ -79,17 +75,12 @@ const HomePage = () => {
           <NavigationMenu className="max-w-none justify-end mb-12">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="px-4 py-2 text-white hover:bg-white/10 rounded-md transition-colors"
-                  onClick={() => setIsAddTripDialogOpen(true)}
-                >
+                <NavigationMenuLink className="px-4 py-2 text-white hover:bg-white/10 rounded-md transition-colors" onClick={() => setIsAddTripDialogOpen(true)}>
                   Create Trip
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="px-4 py-2 text-white hover:bg-white/10 rounded-md transition-colors"
-                >
+                <NavigationMenuLink className="px-4 py-2 text-white hover:bg-white/10 rounded-md transition-colors">
                   Help
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -104,31 +95,22 @@ const HomePage = () => {
               Create detailed trip itineraries, organize activities, and make the most of every adventure with our powerful trip planner.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
-              <Button 
-                size="lg" 
-                onClick={() => {
-                  setTripToEdit(undefined);
-                  setIsAddTripDialogOpen(true);
-                }}
-                className="bg-white text-ocean hover:bg-white/90"
-              >
+              <Button size="lg" onClick={() => {
+              setTripToEdit(undefined);
+              setIsAddTripDialogOpen(true);
+            }} className="bg-white text-ocean hover:bg-white/90">
                 <Plus size={18} className="mr-2" /> Start Planning
               </Button>
-              {allTrips.length > 0 && (
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  onClick={() => {
-                    const scrollTarget = document.getElementById('my-trips');
-                    if (scrollTarget) {
-                      scrollTarget.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="border-white text-white hover:bg-white/10"
-                >
+              {allTrips.length > 0 && <Button variant="outline" size="lg" onClick={() => {
+              const scrollTarget = document.getElementById('my-trips');
+              if (scrollTarget) {
+                scrollTarget.scrollIntoView({
+                  behavior: 'smooth'
+                });
+              }
+            }} className="border-white hover:bg-white/10 text-zinc-950">
                   View My Trips
-                </Button>
-              )}
+                </Button>}
             </div>
           </div>
         </div>
@@ -179,18 +161,15 @@ const HomePage = () => {
               <h2 className="text-3xl font-bold text-gray-900">My Trips</h2>
               <p className="text-gray-600">Plan and organize your adventures</p>
             </div>
-            <Button 
-              onClick={() => {
-                setTripToEdit(undefined);
-                setIsAddTripDialogOpen(true);
-              }}
-            >
+            <Button onClick={() => {
+            setTripToEdit(undefined);
+            setIsAddTripDialogOpen(true);
+          }}>
               <Plus size={16} className="mr-1" /> New Trip
             </Button>
           </div>
           
-          {allTrips.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-gray-200 shadow-sm">
+          {allTrips.length === 0 ? <div className="flex flex-col items-center justify-center p-12 bg-white rounded-xl border border-gray-200 shadow-sm">
               <div className="text-center max-w-md space-y-4">
                 <div className="mx-auto w-16 h-16 rounded-full bg-ocean-light/20 flex items-center justify-center">
                   <Compass className="text-ocean h-8 w-8" />
@@ -200,31 +179,18 @@ const HomePage = () => {
                   Create your first trip to start planning your itinerary. Add days, activities,
                   and organize them with our drag-and-drop interface.
                 </p>
-                <Button 
-                  onClick={() => {
-                    setTripToEdit(undefined);
-                    setIsAddTripDialogOpen(true);
-                  }}
-                  size="lg"
-                  className="animate-pulse-once mt-4"
-                >
+                <Button onClick={() => {
+              setTripToEdit(undefined);
+              setIsAddTripDialogOpen(true);
+            }} size="lg" className="animate-pulse-once mt-4">
                   <Plus size={16} className="mr-1" /> Create Your First Trip
                 </Button>
               </div>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {allTrips.map((trip) => (
-                <div key={trip.id} className="group animate-fade-in hover:animate-lift-up">
-                  <TripCard 
-                    trip={trip} 
-                    onEdit={handleEditTrip}
-                    onDelete={handleDeleteTrip}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+            </div> : <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {allTrips.map(trip => <div key={trip.id} className="group animate-fade-in hover:animate-lift-up">
+                  <TripCard trip={trip} onEdit={handleEditTrip} onDelete={handleDeleteTrip} />
+                </div>)}
+            </div>}
         </div>
       </div>
       
@@ -248,14 +214,7 @@ const HomePage = () => {
         </div>
       </footer>
       
-      <AddTripDialog 
-        open={isAddTripDialogOpen}
-        onOpenChange={setIsAddTripDialogOpen}
-        onSave={handleSaveTrip}
-        initialData={tripToEdit}
-      />
-    </div>
-  );
+      <AddTripDialog open={isAddTripDialogOpen} onOpenChange={setIsAddTripDialogOpen} onSave={handleSaveTrip} initialData={tripToEdit} />
+    </div>;
 };
-
 export default HomePage;
