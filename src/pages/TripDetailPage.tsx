@@ -229,28 +229,31 @@ const TripDetailPage: React.FC = () => {
         const activityToMove = sourceDay.activities.find(act => act.id === item.id);
         
         if (activityToMove) {
-          // Create updated trip
+          // Create updated trip - FIXED: Proper immutable approach to update days
+          const updatedDays = currentTrip.days.map(day => {
+            // Remove from source day
+            if (day.id === sourceDayId) {
+              return {
+                ...day,
+                activities: day.activities.filter(act => act.id !== item.id),
+              };
+            }
+            
+            // Add to target day
+            if (day.id === targetDayId) {
+              return {
+                ...day,
+                activities: [...day.activities, activityToMove],
+              };
+            }
+            
+            return day;
+          });
+          
+          // Update trip with new days array
           const updatedTrip = {
             ...currentTrip,
-            days: currentTrip.days.map(day => {
-              // Remove from source day
-              if (day.id === sourceDayId) {
-                return {
-                  ...day,
-                  activities: day.activities.filter(act => act.id !== item.id),
-                };
-              }
-              
-              // Add to target day
-              if (day.id === targetDayId) {
-                return {
-                  ...day,
-                  activities: [...day.activities, activityToMove],
-                };
-              }
-              
-              return day;
-            }),
+            days: updatedDays,
           };
           
           updateTrip(updatedTrip);

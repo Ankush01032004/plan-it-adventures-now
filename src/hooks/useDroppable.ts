@@ -58,7 +58,7 @@ export const useDroppable = (options: DroppableOptions) => {
               }
             });
             
-            element.dispatchEvent(dropEvent);
+            document.dispatchEvent(dropEvent);
             
             // Call the onDrop callback if provided
             if (onDrop) {
